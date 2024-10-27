@@ -9,6 +9,7 @@ import { IoMdClose } from 'react-icons/io';
 import { Post } from '@/types/Post';
 import { useSearchParams } from 'next/navigation';
 import { format, parseISO, isAfter, isBefore, addDays } from 'date-fns';
+import { Suspense } from 'react';
 
 type CalendarEvent = {
   id: string;
@@ -17,6 +18,14 @@ type CalendarEvent = {
 };
 
 export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentCategory, setCurrentCategory] = useState('');
   const [selectedPostTitle, setSelectedPostTitle] = useState<string | null>(null);
