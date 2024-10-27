@@ -109,11 +109,12 @@ function HomeContent() {
     setHasMore(true);
   }, [currentCategory, searchTerm]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (posts.length > 0) {
       loadMorePosts();
     }
-  }, [posts]);
+  }, [posts, loadMorePosts]); // Add loadMorePosts to the dependency array
 
   useEffect(() => {
     if (inView && hasMore) {
@@ -145,10 +146,11 @@ function HomeContent() {
   const categories = ['', 'internship', 'competitions', 'scholarships', 'mentors'];
   const mentorCategory = 'mentors';
 
-  const displayFullPost = (post: Post) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const displayFullPost = useCallback((post: Post) => {
     setSelectedPostTitle(post.title);
     setShowWelcome(false);
-  };
+  }, []);
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
