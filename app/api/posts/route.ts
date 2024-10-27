@@ -28,8 +28,8 @@ export async function GET() {
 
     return NextResponse.json(uniquePosts);
   } catch (error) {
-    console.error('Error fetching posts:', error);
-    return NextResponse.json({ error: 'Error fetching posts' }, { status: 500 });
+    console.error('Error in /api/posts:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   } finally {
     await client.close();
   }
