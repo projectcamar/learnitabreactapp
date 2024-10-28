@@ -42,6 +42,7 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<'latest' | 'newest'>('latest');
   const [filterDays, setFilterDays] = useState<number | null>(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -75,6 +76,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch('/api/posts');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -89,6 +91,8 @@ export default function Home() {
         setPosts(processedData);
       } catch (error) {
         console.error('Error fetching posts:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPosts();
@@ -402,6 +406,15 @@ export default function Home() {
         return isBefore(eventDate, addDays(new Date(), filterDays));
       })
     : sortedEvents;
+
+  // Add loading state render
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-900"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 relative overflow-hidden">

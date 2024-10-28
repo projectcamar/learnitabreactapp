@@ -9,20 +9,13 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    unoptimized: true
+    unoptimized: true,
+    dangerouslyAllowSVG: true,
   },
-  compress: true,
-  headers: async () => [
-    {
-      source: '/:path*',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable',
-        },
-      ],
-    },
-  ]
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false, net: false, tls: false };
+    return config;
+  },
 }
 
 module.exports = nextConfig
