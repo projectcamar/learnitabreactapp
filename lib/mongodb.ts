@@ -28,6 +28,20 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = client.connect()
 }
 
+// Add error handling and connection timeout
+clientPromise = (async () => {
+  try {
+    client = new MongoClient(uri, {
+      ...options,
+      serverSelectionTimeoutMS: 5000, // 5 second timeout
+    });
+    return await client.connect();
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    throw error;
+  }
+})();
+
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
 export default clientPromise

@@ -6,10 +6,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'od.lk',
       },
+      // Add other specific domains you use
     ],
-    unoptimized: true,
+    unoptimized: false, // Remove this unless absolutely necessary
     dangerouslyAllowSVG: true,
   },
   webpack: (config) => {
