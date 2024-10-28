@@ -2,36 +2,39 @@
 const nextConfig = {
   output: 'standalone',
   images: {
-    unoptimized: true,
-    remotePatterns: [
+    domains: ['*'],
+    unoptimized: true
+  },
+  // Add these configurations
+  poweredByHeader: false,
+  generateEtags: false,
+  distDir: '.next',
+  cleanDistDir: true,
+  assetPrefix: '',
+  compress: true,
+  // Ensure proper MIME types
+  headers: async () => {
+    return [
       {
-        protocol: 'https',
-        hostname: '*',
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
-    ],
-    domains: [
-      'od.lk',
-      'e7.pngegg.com',
-      'images.glints.com',
-      'upload.wikimedia.org',
-      'media.licdn.com',
-      'www.linkedin.com',
-      'instagram.com'
-    ],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  webpack: (config) => {
-    config.watchOptions = {
-      poll: 1000,
-      aggregateTimeout: 300,
-    }
-    return config
-  },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/javascript',
+          },
+        ],
+      },
+    ]
+  }
 }
 
 module.exports = nextConfig
