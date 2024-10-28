@@ -201,7 +201,7 @@ export default function Home() {
     setFavorites(prevFavorites => {
       const newFavorites = prevFavorites.includes(postTitle)
         ? prevFavorites.filter(title => title !== postTitle)
-        : [...new Set([...prevFavorites, postTitle])];
+        : Array.from(new Set([...prevFavorites, postTitle]));
       
       localStorage.setItem('favorites', JSON.stringify(newFavorites));
       return newFavorites;
