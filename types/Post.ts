@@ -1,15 +1,20 @@
 export interface Post {
   _id: string;
   title: string;
-  body: string | string[];
   category: string;
   image: string;
-  labels: Record<string, string | string[]>;
+  link: string;
+  body?: string | string[];
   deadline?: string;
   location?: string;
   email?: string;
   phone?: string;
-  link?: string;
+  labels: {
+    [key: string]: string | string[];
+    Organization?: string | string[];
+    Company?: string | string[];
+    'Mentoring Topic'?: string | string[];
+  };
   linkedin?: string;
   instagram?: string;
   experience?: string[];
@@ -18,5 +23,4 @@ export interface Post {
   requirements?: string[];
   expired?: boolean;
   daysLeft?: number;
-  updatedAt?: string | Date;
 }

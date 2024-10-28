@@ -1,1 +1,4 @@
-declare module 'mongodb';
+declare module 'mongodb' {
+  export * from 'mongodb/types';
+}
+
