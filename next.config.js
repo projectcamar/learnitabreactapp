@@ -3,38 +3,26 @@ const nextConfig = {
   output: 'standalone',
   images: {
     domains: ['*'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
     unoptimized: true
   },
-  // Add these configurations
-  poweredByHeader: false,
-  generateEtags: false,
-  distDir: '.next',
-  cleanDistDir: true,
-  assetPrefix: '',
   compress: true,
-  // Ensure proper MIME types
-  headers: async () => {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
-        source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/javascript',
-          },
-        ],
-      },
-    ]
-  }
+  headers: async () => [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
+        },
+      ],
+    },
+  ]
 }
 
 module.exports = nextConfig
