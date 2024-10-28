@@ -10,10 +10,12 @@ export interface Post {
   email?: string;
   phone?: string;
   labels: {
-    [key: string]: string | string[];
+    // Remove the index signature and explicitly define all possible label types
     Organization?: string | string[];
     Company?: string | string[];
-    'Mentoring Topic'?: string | string[];
+    'Mentoring Topic'?: string[];
+    // Add any other specific label types you need
+    [key: string]: string | string[] | undefined; // Make the index signature accept undefined
   };
   linkedin?: string;
   instagram?: string;

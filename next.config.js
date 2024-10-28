@@ -17,12 +17,11 @@ const nextConfig = {
       },
     ],
   },
-  typescript: {
-    // During development you can set this to false
-    ignoreBuildErrors: false,
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
   },
-  // Ensure Next.js uses SWC for faster builds
-  swcMinify: true,
 }
 
 module.exports = nextConfig

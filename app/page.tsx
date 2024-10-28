@@ -136,10 +136,10 @@ export default function Home() {
   const categories = ['', 'internship', 'competitions', 'scholarships', 'mentors'];
   const mentorCategory = 'mentors';
 
-  const displayFullPost = (post: Post) => {
+  const displayFullPost = useCallback((post: Post) => {
     setSelectedPostTitle(post.title);
     setShowWelcome(false);
-  };
+  }, []);
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
