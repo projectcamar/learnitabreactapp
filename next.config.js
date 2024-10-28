@@ -9,6 +9,15 @@ const nextConfig = {
         hostname: '*',
       },
     ],
+    domains: [
+      'od.lk',
+      'e7.pngegg.com',
+      'images.glints.com',
+      'upload.wikimedia.org',
+      'media.licdn.com',
+      'www.linkedin.com',
+      'instagram.com'
+    ],
   },
   eslint: {
     ignoreDuringBuilds: true,
