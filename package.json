@@ -1,6 +1,7 @@
 {
   "name": "learnitab-nextjs",
   "version": "0.1.0",
+  "homepage": "https://learnitab.vercel.app",
   "private": true,
   "scripts": {
     "dev": "next dev",

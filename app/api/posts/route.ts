@@ -1,23 +1,18 @@
 import { NextResponse } from 'next/server';
-import { MongoClient, ServerApiVersion } from 'mongodb';
-
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local')
-}
-
-const uri = process.env.MONGODB_URI;
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+import { MongoClient } from 'mongodb';
 
 export async function GET() {
   try {
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MongoDB URI is not defined');
+    }
+
+    const client = new MongoClient(process.env.MONGODB_URI);
+    
+    console.log('Connecting to MongoDB...');
     await client.connect();
+    
+    console.log('Connected to MongoDB, fetching data...');
     const database = client.db('learnitabDatabase');
     const categories = ['internship', 'competitions', 'scholarships', 'volunteers', 'events', 'mentors'];
     let allData = [];
@@ -28,6 +23,8 @@ export async function GET() {
       allData.push(...data.map(item => ({ ...item, category })));
     }
 
+    console.log(`Fetched ${allData.length} items`);
+    
     return NextResponse.json(allData);
   } catch (error: any) {
     console.error('Error in /api/posts:', error);
@@ -35,7 +32,5 @@ export async function GET() {
       { error: 'Internal Server Error', details: error.message },
       { status: 500 }
     );
-  } finally {
-    await client.close();
   }
 }
