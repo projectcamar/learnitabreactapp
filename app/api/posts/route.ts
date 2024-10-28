@@ -2,10 +2,18 @@ import { NextResponse } from 'next/server';
 import { MongoClient, Document } from 'mongodb';
 
 export async function GET() {
-  const client = new MongoClient(process.env.MONGODB_URI as string);
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    console.error('MONGODB_URI is not defined');
+    return NextResponse.json({ error: 'Database configuration error' }, { status: 500 });
+  }
+
+  const client = new MongoClient(uri);
 
   try {
     await client.connect();
+    console.log('Connected to MongoDB');  // Add logging
+    
     const database = client.db('learnitabDatabase');
     const categories = ['internship', 'competitions', 'scholarships', 'mentors'];
     let allPosts: any[] = [];
@@ -27,9 +35,9 @@ export async function GET() {
     const uniquePosts = Array.from(uniqueMap.values());
 
     return NextResponse.json(uniquePosts);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in /api/posts:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
   } finally {
     await client.close();
   }

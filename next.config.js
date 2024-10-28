@@ -2,12 +2,7 @@
    const nextConfig = {
     reactStrictMode: true,
     images: {
-      remotePatterns: [
-        {
-          protocol: 'https',
-          hostname: '**',
-        },
-      ],
+      domains: ['od.lk'], // Add any other domains you're loading images from
     },
   }
 
