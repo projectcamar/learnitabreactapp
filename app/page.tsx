@@ -10,6 +10,7 @@ import { Post } from '@/types/Post';
 import { useSearchParams } from 'next/navigation';
 import { format, parseISO, isAfter, isBefore, addDays } from 'date-fns';
 import { ErrorBoundary } from 'react-error-boundary';
+import dynamic from 'next/dynamic'
 
 type CalendarEvent = {
   id: string;
@@ -451,6 +452,10 @@ export default function Home() {
     };
     debugInfo();
   }, []);
+
+  if (typeof window === 'undefined') {
+    return null; // Prevents hydration issues
+  }
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
