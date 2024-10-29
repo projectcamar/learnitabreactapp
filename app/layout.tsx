@@ -5,7 +5,10 @@ import type { Metadata } from 'next'
 import { ErrorBoundary } from 'react-error-boundary';
 import dynamic from 'next/dynamic';
 
-const Error = dynamic(() => import('./error'), { ssr: false });
+const Error = dynamic(() => import('./error'), { 
+  ssr: true,
+  loading: () => <div>Loading...</div>
+});
 
 export const metadata: Metadata = {
   title: 'Learnitab',
@@ -20,8 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ErrorBoundary fallback={<Error error={new Error('Something went wrong')} reset={() => window.location.reload()} />}>
-          <main>{children}</main>
+        <ErrorBoundary fallback={
+          <Error 
+            error={{ message: "Something went wrong" }}
+            reset={() => window.location.reload()}
+          />
+        }>
+          {children}
         </ErrorBoundary>
       </body>
     </html>
