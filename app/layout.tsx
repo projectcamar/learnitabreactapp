@@ -1,14 +1,6 @@
-'use client'
-
 import './globals.css'
 import type { Metadata } from 'next'
-import { ErrorBoundary } from 'react-error-boundary';
-import dynamic from 'next/dynamic';
-
-const Error = dynamic(() => import('./error'), { 
-  ssr: true,
-  loading: () => <div>Loading...</div>
-});
+import ClientLayout from './components/ClientLayout'
 
 export const metadata: Metadata = {
   title: 'Learnitab',
@@ -20,18 +12,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <body>
-        <ErrorBoundary fallback={
-          <Error 
-            error={{ message: "Something went wrong" }}
-            reset={() => window.location.reload()}
-          />
-        }>
-          {children}
-        </ErrorBoundary>
-      </body>
-    </html>
-  )
+  return <ClientLayout>{children}</ClientLayout>
 }
