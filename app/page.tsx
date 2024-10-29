@@ -65,6 +65,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [recommendations, setRecommendations] = useState<Post[]>([]);
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
+  const [showBanner, setShowBanner] = useState(true);
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -446,10 +447,6 @@ export default function Home() {
       debugInfo();
     }
   }, []);
-
-  if (typeof window === 'undefined') {
-    return null; // Prevents hydration issues
-  }
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -922,9 +919,5 @@ export default function Home() {
       </div>
     </ErrorBoundary>
   );
-}
-
-function setShowBanner(arg0: boolean) {
-  throw new Error('Function not implemented.');
 }
 
