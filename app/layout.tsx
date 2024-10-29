@@ -1,16 +1,16 @@
+'use client'
+
 import './globals.css'
 import type { Metadata } from 'next'
-import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import Error from './error';
+import { ErrorBoundary } from 'react-error-boundary';
+import dynamic from 'next/dynamic';
+
+const Error = dynamic(() => import('./error'), { ssr: false });
 
 export const metadata: Metadata = {
   title: 'Learnitab',
   description: 'Find opportunities for internships, competitions, scholarships, and mentorship',
 }
-
-const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => (
-  <Error error={error} reset={resetErrorBoundary} />
-);
 
 export default function RootLayout({
   children,
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <ErrorBoundary fallback={<Error error={new Error('Something went wrong')} reset={() => window.location.reload()} />}>
           <main>{children}</main>
         </ErrorBoundary>
       </body>
