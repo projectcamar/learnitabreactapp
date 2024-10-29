@@ -71,30 +71,26 @@ export default function Home() {
     threshold: 0,
   });
 
-  const filterPosts = useCallback(() => {
-    return posts.filter(post => {
-      const matchesCategory = currentCategory === '' || post.category.toLowerCase() === currentCategory.toLowerCase();
-      const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        (typeof post.body === 'string' && post.body.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (Array.isArray(post.body) && post.body.some(item => typeof item === 'string' && item.toLowerCase().includes(searchTerm.toLowerCase())));
-      
+  const loadMorePosts = useCallback(() => {
+    const filteredPosts = posts.filter(post => {
+      const matchesCategory = !currentCategory || post.category === currentCategory;
+      const matchesSearch = !searchTerm || 
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.category.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [posts, currentCategory, searchTerm]);
 
-  const loadMorePosts = useCallback(() => {
-    const filteredPosts = filterPosts();
-    const startIndex = (page - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    const newPosts = filteredPosts.slice(startIndex, endIndex);
+    const nextPosts = filteredPosts.slice(
+      visiblePosts.length,
+      visiblePosts.length + postsPerPage
+    );
 
-    if (newPosts.length > 0) {
-      setVisiblePosts(prevPosts => [...prevPosts, ...newPosts]);
-      setPage(prevPage => prevPage + 1);
+    if (nextPosts.length > 0) {
+      setVisiblePosts(prev => [...prev, ...nextPosts]);
     } else {
       setHasMore(false);
     }
-  }, [filterPosts, page, postsPerPage]);
+  }, [posts, currentCategory, searchTerm, visiblePosts, postsPerPage]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -434,16 +430,16 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const debugInfo = async () => {
-      try {
-        const response = await fetch('/api/posts');
-        const data = await response.json();
-        console.log('API Response:', data);
-      } catch (error) {
-        console.error('API Error:', error);
-      }
-    };
     if (typeof window !== 'undefined') {
+      const debugInfo = async () => {
+        try {
+          const response = await fetch('/api/posts');
+          const data = await response.json();
+          console.log('API Response:', data);
+        } catch (error) {
+          console.error('API Error:', error);
+        }
+      };
       debugInfo();
     }
   }, []);
