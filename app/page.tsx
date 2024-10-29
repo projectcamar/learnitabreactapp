@@ -41,7 +41,6 @@ function ErrorFallback({error, resetErrorBoundary}: ErrorFallbackProps) {
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [recommendations, setRecommendations] = useState<Post[]>([]);
   const [currentCategory, setCurrentCategory] = useState('');
   const [selectedPostTitle, setSelectedPostTitle] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,6 +63,7 @@ export default function Home() {
   const [filterDays, setFilterDays] = useState<number | null>(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [recommendations, setRecommendations] = useState<Post[]>([]);
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   const { ref, inView } = useInView({
@@ -442,7 +442,9 @@ export default function Home() {
         console.error('API Error:', error);
       }
     };
-    debugInfo();
+    if (typeof window !== 'undefined') {
+      debugInfo();
+    }
   }, []);
 
   if (typeof window === 'undefined') {
@@ -921,6 +923,7 @@ export default function Home() {
     </ErrorBoundary>
   );
 }
+
 function setShowBanner(arg0: boolean) {
   throw new Error('Function not implemented.');
 }
