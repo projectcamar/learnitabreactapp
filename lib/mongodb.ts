@@ -4,10 +4,15 @@ if (!process.env.MONGODB_URI) {
   throw new Error('Please add your Mongo URI to .env.local')
 }
 
-const uri = process.env.MONGODB_URI
-const options = {}
+// Add debug logging
+console.log('MongoDB URI prefix:', process.env.MONGODB_URI.substring(0, 20) + '...')
 
-let client
+const uri = process.env.MONGODB_URI.trim() // Add trim() to remove any whitespace
+const options = {
+  serverSelectionTimeoutMS: 5000, // 5 second timeout
+}
+
+let client: MongoClient
 let clientPromise: Promise<MongoClient>
 
 if (process.env.NODE_ENV === 'development') {
@@ -21,27 +26,11 @@ if (process.env.NODE_ENV === 'development') {
     client = new MongoClient(uri, options)
     globalWithMongo._mongoClientPromise = client.connect()
   }
-  clientPromise = globalWithMongo._mongoClientPromise
+  clientPromise = globalWithMongo._mongoClientPromise!
 } else {
   // In production mode, it's best to not use a global variable.
   client = new MongoClient(uri, options)
   clientPromise = client.connect()
 }
 
-// Add error handling and connection timeout
-clientPromise = (async () => {
-  try {
-    client = new MongoClient(uri, {
-      ...options,
-      serverSelectionTimeoutMS: 5000, // 5 second timeout
-    });
-    return await client.connect();
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    throw error;
-  }
-})();
-
-// Export a module-scoped MongoClient promise. By doing this in a
-// separate module, the client can be shared across functions.
 export default clientPromise

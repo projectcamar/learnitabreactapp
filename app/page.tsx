@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
 import Logo from '../public/images/Logo Learnitab.png';
-import { FiSearch, FiBriefcase, FiAward, FiBookOpen, FiUsers, FiChevronDown, FiHeart, FiMessageSquare, FiYoutube, FiLinkedin, FiInstagram, FiLink, FiMenu, FiCalendar, FiTrash2, FiClock, FiBell, FiRotateCw } from 'react-icons/fi';
+import { FiSearch, FiBriefcase, FiAward, FiBookOpen, FiUsers, FiChevronDown, FiHeart, FiMessageSquare, FiYoutube, FiLinkedin, FiInstagram, FiLink, FiMenu, FiCalendar, FiTrash2, FiRotateCw } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 import { Post } from '@/types/Post';
 import { useSearchParams } from 'next/navigation';
@@ -41,6 +41,7 @@ function ErrorFallback({error, resetErrorBoundary}: ErrorFallbackProps) {
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [recommendations, setRecommendations] = useState<Post[]>([]);
   const [currentCategory, setCurrentCategory] = useState('');
   const [selectedPostTitle, setSelectedPostTitle] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,9 +54,6 @@ export default function Home() {
   const postsPerPage = 10;
   const listRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
-  const [recommendations, setRecommendations] = useState<Post[]>([]);
-  const [showBanner, setShowBanner] = useState(true);
-  const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const [userInterests, setUserInterests] = useState<string[]>([]);
   const [urlPostId, setUrlPostId] = useState<string | null>(null);
   const [showCalendarPanel, setShowCalendarPanel] = useState(false);
@@ -66,6 +64,7 @@ export default function Home() {
   const [filterDays, setFilterDays] = useState<number | null>(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -132,7 +131,7 @@ export default function Home() {
     if (posts.length > 0) {
       loadMorePosts();
     }
-  }, [posts]);
+  }, [posts, loadMorePosts]);
 
   useEffect(() => {
     if (inView && hasMore) {
@@ -162,7 +161,6 @@ export default function Home() {
   }, [handleScroll]);
 
   const categories = ['', 'internship', 'competitions', 'scholarships', 'mentors'];
-  const mentorCategory = 'mentors';
 
   const displayFullPost = useCallback((post: Post) => {
     setSelectedPostTitle(post.title);
@@ -209,12 +207,6 @@ export default function Home() {
       generateRecommendations();
     }
   }, [posts, userInterests, generateRecommendations]);
-
-  // Add this function to generate a unique slug
-  const generateSlug = (post: Post) => {
-    const titleSlug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    return `${titleSlug}-${post._id.slice(-6)}`;
-  };
 
   // Update the copyPostLink function
   const copyPostLink = (post: Post) => {
@@ -929,3 +921,7 @@ export default function Home() {
     </ErrorBoundary>
   );
 }
+function setShowBanner(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
