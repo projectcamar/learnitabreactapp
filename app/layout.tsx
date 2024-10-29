@@ -1,6 +1,5 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import ClientLayout from './components/ClientLayout'
 
 export const metadata: Metadata = {
   title: 'Learnitab',
@@ -12,5 +11,4 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <ClientLayout>{children}</ClientLayout>
 }
