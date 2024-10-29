@@ -40,6 +40,7 @@ function ErrorFallback({error, resetErrorBoundary}: ErrorFallbackProps) {
 }
 
 export default function Home() {
+  // 1. First, declare all hooks
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentCategory, setCurrentCategory] = useState('');
   const [selectedPostTitle, setSelectedPostTitle] = useState<string | null>(null);
@@ -92,6 +93,7 @@ export default function Home() {
     }
   }, [posts, currentCategory, searchTerm, visiblePosts, postsPerPage]);
 
+  // 2. Then declare all useEffects
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -136,6 +138,7 @@ export default function Home() {
     }
   }, [inView, hasMore, loadMorePosts]);
 
+  // 3. Then other functions
   const handleScroll = useCallback(() => {
     if (listRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = listRef.current;
