@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
     _mongoClientPromise?: Promise<MongoClient>
   }
 
-  if (!globalWithMongo._monWgoClientPromise) {
+  if (!globalWithMongo._mongoClientPromise) {
     client = new MongoClient(uri, options)
     globalWithMongo._mongoClientPromise = client.connect()
   }
